@@ -1,3 +1,4 @@
+import { AuthService } from './auth/auth.service';
 import {
   Controller,
   Get,
@@ -18,11 +19,12 @@ export class AppController {
   constructor(
     private readonly appService: AppService,
     private configService: ConfigService,
+    private authService: AuthService
   ) {}
 
   @UseGuards(LocalAuthGuard)
   @Post('/login')
   handleLogin(@Request() req) {
-    return req.user;
+    return this.authService.login(req.user);
   }
 }
