@@ -20,7 +20,7 @@ export class AppController {
   constructor(
     private readonly appService: AppService,
     private configService: ConfigService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
   @Public()
   @UseGuards(LocalAuthGuard)

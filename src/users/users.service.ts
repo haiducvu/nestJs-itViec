@@ -20,6 +20,7 @@ export class UsersService {
   };
 
   async create(createUserDto: CreateUserDto) {
+    // return this.userModel.deleteMany({});
     const hashPassword = this.getHashPassword(createUserDto.password);
     const user = await this.userModel.create({
       email: createUserDto.email,
