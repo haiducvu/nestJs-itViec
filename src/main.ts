@@ -13,7 +13,7 @@ async function bootstrap() {
   app.useGlobalGuards(new JwtAuthGuard(reflector));
 
   app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalInterceptors(new TransformInterceptor(reflector));
 
   // config CORS
   app.enableCors({
