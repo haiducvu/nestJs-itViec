@@ -20,11 +20,12 @@ export class User {
   @Prop()
   refreshToken: string;
   @Prop()
-  age: string;
+  age: number;
   @Prop()
   gender: string;
   @Prop()
   address: string;
+  @Prop({ type: Object })
   createdBy: {
     _id: mongoose.Schema.Types.ObjectId;
     email: string;
@@ -40,7 +41,7 @@ export class User {
     email: string;
   };
   @Prop()
-  createAt: Date;
+  createdAt: Date;
   @Prop()
   updateAt: Date;
   @Prop()

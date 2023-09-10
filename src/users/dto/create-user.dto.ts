@@ -31,9 +31,9 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'Age không được bỏ trống' })
   age: number;
   @IsNotEmpty({ message: 'Gender không được bỏ trống' })
-  gender: number;
+  gender: string;
   @IsNotEmpty({ message: 'Address không được bỏ trống' })
-  address: number;
+  address: string;
   @IsNotEmpty({ message: 'Role không được bỏ trống' })
   role: string;
 

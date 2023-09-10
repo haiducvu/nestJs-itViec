@@ -15,13 +15,14 @@ export class CompaniesService {
   ) {}
 
   create(createCompanyDto: CreateCompanyDto, user: IUser) {
+    // return this.companyModel.deleteMany({});
     return this.companyModel.create({
       ...createCompanyDto,
       createdBy: {
         _id: user._id,
         email: user.email,
       },
-    }); //this.companyModel.deleteMany({})
+    });
   }
 
   async findAll(currentPage: string, limit: string, qs: string) {
