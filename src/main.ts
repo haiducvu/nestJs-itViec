@@ -21,10 +21,11 @@ async function bootstrap() {
 
   // config CORS
   app.enableCors({
-    origin: '*', //http://localhost:3000
+    origin: true, //=> chỉ cho phép kết nổi từ cùng origin với server //'*' => cho phép kết nối từ bất cứ nơi đâu, //http://localhost:3000 => specific
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
-    optionsSuccessStatus: 204,
+    // optionsSuccessStatus: 204,
+    credentials: true,
   });
 
   // config versioning
