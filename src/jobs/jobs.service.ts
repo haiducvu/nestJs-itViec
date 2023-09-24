@@ -16,8 +16,17 @@ export class JobsService {
   ) {}
 
   async create(createJobDto: CreateJobDto, user) {
-    const { name, skills, company, salary, endDate, startDate, isActive } =
-      createJobDto;
+    const {
+      name,
+      skills,
+      company,
+      salary,
+      endDate,
+      startDate,
+      isActive,
+      location,
+      description,
+    } = createJobDto;
     let newJob = await this.jobModel.create({
       name,
       skills,
@@ -26,6 +35,8 @@ export class JobsService {
       endDate,
       startDate,
       isActive,
+      location,
+      description,
       createdBy: {
         _id: user._id,
         email: user.email,
@@ -67,12 +78,12 @@ export class JobsService {
     };
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     if (!mongoose.Types.ObjectId.isValid(id)) return `not found job`;
     return await this.jobModel.findById(id);
   }
 
-  async update(id: number, updateJobDto: UpdateJobDto, user: IUser) {
+  async update(id: string, updateJobDto: UpdateJobDto, user: IUser) {
     return await this.jobModel.updateOne(
       { _id: id },
       {

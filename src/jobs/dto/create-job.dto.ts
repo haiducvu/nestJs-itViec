@@ -16,6 +16,8 @@ class Company {
   _id: mongoose.Schema.Types.ObjectId;
   @IsNotEmpty()
   name: string;
+  @IsNotEmpty()
+  logo: string;
 }
 
 export class CreateJobDto {
@@ -32,7 +34,8 @@ export class CreateJobDto {
   @ValidateNested()
   @Type(() => Company)
   company: Company;
-
+  @IsNotEmpty({ message: 'location khong duoc de trong' })
+  location: number;
   @IsNotEmpty({ message: 'salary khong duoc de trong' })
   salary: number;
 
