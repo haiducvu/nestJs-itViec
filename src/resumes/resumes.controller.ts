@@ -9,7 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ResumesService } from './resumes.service';
-import { CreateResumeDto } from './dto/create-resume.dto';
+import { CreateResumeDto, CreateUserCvDto } from './dto/create-resume.dto';
 import { UpdateResumeDto } from './dto/update-resume.dto';
 import { ResponseMessage, isUserCurrentLogIn } from 'src/decorator/customize';
 import { IUser } from 'src/users/users.interface';
@@ -21,10 +21,10 @@ export class ResumesController {
   @Post()
   @ResponseMessage('Create a new resume')
   create(
-    @Body() createResumeDto: CreateResumeDto,
+    @Body() createUserDto: CreateUserCvDto,
     @isUserCurrentLogIn() user: IUser,
   ) {
-    return this.resumesService.create(createResumeDto, user);
+    return this.resumesService.create(createUserDto, user);
   }
 
   @Post('by-user')
