@@ -23,7 +23,9 @@ export class AuthService {
       const isValid = this.usersService.isValidPassword(pass, user.password);
       if (isValid === true) {
         const userRole = user.role as unknown as { _id: string; name: string };
-        const information = await this.rolesService.findOne(userRole._id);
+        const information = (
+          await this.rolesService.findOne(userRole._id)
+        ).toObject();
 
         const objectUser = {
           ...user.toObject(),

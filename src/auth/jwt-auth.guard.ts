@@ -1,10 +1,12 @@
 import {
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 import { Observable } from 'rxjs';
 import { IS_PUBLIC_KEY } from 'src/decorator/customize';
 
@@ -33,6 +35,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     context: ExecutionContext,
     status?: any,
   ): TUser {
+    const request: Request = context.switchToHttp().getRequest();
+    // You can throw an exception
     if (err || !user) {
       throw (
         err ||
@@ -41,6 +45,21 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         )
       );
     }
+    // check permissions
+    const targetMethod = request.method;
+    const targetEndpoint = request.route?.path;
+
+    const permissions = user?.permissions ?? [];
+    const isExist = permissions.find(
+      (permission) =>
+        targetMethod === permission.method &&
+        targetEndpoint === permission.apiPath,
+    );
+
+    if (!isExist) {
+      throw new ForbiddenException('Ban khong co quyen truy cap Endpoint nay!');
+    }
+
     return user;
   }
 }
