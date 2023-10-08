@@ -17,10 +17,14 @@ import {
 import { RegisterUserDto } from 'src/users/dto/create-user.dto';
 import { Response, Request } from 'express';
 import { IUser } from 'src/users/users.interface';
+import { RolesService } from 'src/roles/roles.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private roleService: RolesService,
+  ) {}
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('/login')
@@ -38,7 +42,9 @@ export class AuthController {
 
   @ResponseMessage('Get user information')
   @Get('/account')
-  handleGetAccount(@isUserCurrentLogIn() user: IUser) {
+  async handleGetAccount(@isUserCurrentLogIn() user: IUser) {
+    const information = (await this.roleService.findOne(user.role._id)) as any;
+    user.permissions = information.permissions;
     return { user };
   }
 
