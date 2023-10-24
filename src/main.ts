@@ -5,16 +5,21 @@ import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { TransformInterceptor } from './core/transform.interceptor';
 import cookieParser from 'cookie-parser';
-import * as express from 'express';
+import { join } from 'path';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
 
   const reflector = app.get(Reflector);
   app.useGlobalGuards(new JwtAuthGuard(reflector));
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new TransformInterceptor(reflector));
+
+  app.useStaticAssets(join(__dirname, '..', 'public')); //js, css, images
+  app.setBaseViewsDir(join(__dirname, '..', 'views')); //view
+  app.setViewEngine('ejs');
 
   // config cookies
   app.use(cookieParser());
@@ -34,7 +39,7 @@ async function bootstrap() {
     type: VersioningType.URI,
     defaultVersion: ['1', '2'],
   });
-  app.use('/images', express.static('public/images'));
+  // app.use('/images', express.static('public/images'));
   await app.listen(configService.get<string>('PORT'));
 }
 bootstrap();
