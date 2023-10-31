@@ -78,12 +78,9 @@ export class SubscribersService {
     });
   }
 
-  async update(_id: string, updateRoleDto: UpdateSubscriberDto, user: IUser) {
-    if (!mongoose.Types.ObjectId.isValid(_id)) {
-      throw new BadRequestException('not found role');
-    }
-    return await this.subscriberModel.updateOne(
-      { _id },
+  async update(updateRoleDto: UpdateSubscriberDto, user: IUser) {
+    const updated = await this.subscriberModel.updateOne(
+      { email: user.email },
       {
         ...updateRoleDto,
         updatedBy: {
@@ -91,7 +88,9 @@ export class SubscribersService {
           email: user.email,
         },
       },
+      { upsert: true },
     );
+    return updated;
   }
 
   async remove(id: string, user: IUser) {
@@ -111,5 +110,10 @@ export class SubscribersService {
     return this.subscriberModel.softDelete({
       _id: id,
     });
+  }
+
+  async getSkills(user: IUser) {
+    const { email } = user;
+    return await this.subscriberModel.findOne({ email }, { skills: 1 });
   }
 }
